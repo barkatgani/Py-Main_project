@@ -3,6 +3,8 @@ import webbrowser
 import pyttsx3
 import music
 import requests
+import os
+from dotenv import load_dotenv
 
 recognizer = sr.Recognizer()
 engine = pyttsx3.init()
@@ -11,7 +13,9 @@ def speak(text):
     engine.say(text)
     engine.runAndWait()
 
-newsapi= "0f3ff6edfe264e208d06306ea6b9aa18"
+    load_dotenv()
+
+    NEWS_API_KEY = os.getenv("NEWS_API_KEY")
 def processcommand(c):
     if "open google" in c.lower():
         webbrowser.open("https://www.google.com")
@@ -29,9 +33,11 @@ def processcommand(c):
         webbrowser.open(link)
     elif "news" in c.lower():
 
-        r = requests.get( "https://newsapi.org/v2/top-headlines?country=us&apiKey=0f3ff6edfe264e208d06306ea6b9aa18" )
-
-
+        r = requests.get("https://newsapi.org/v2/top-headlines",
+           params={
+             "country": "in",
+             "apiKey": NEWS_API_KEY} )
+        
         data = r.json()
 
         if data["status"] == "ok":
